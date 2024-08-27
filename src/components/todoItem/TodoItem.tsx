@@ -3,9 +3,7 @@ import { FC, useEffect, useRef, useState, KeyboardEvent } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { useTodosContext } from '../../context/context';
-import { updateTodo } from '../../api/todos';
-import { updateTodoForm } from '../../helpers/updateTodoForm';
-import { ErrorMessages } from '../../enum/ErrorMessages';
+import { updateTodoOnClick } from '../../helpers/updateTodoOnClick';
 
 interface Props {
   todo: Todo;
@@ -35,34 +33,16 @@ export const TodoItem: FC<Props> = ({
   const [initialTitle, setInitialTitle] = useState(title);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const trimmedValue = editValue.trim();
+
   const handleSelectInputChange = async () => {
-    const newStatus = !completed;
-
-    try {
-      setTodoLoading(id, true);
-      setErrorMessage(ErrorMessages.none);
-      await updateTodo(id, { completed: newStatus });
-      setTodos(prevTodos =>
-        prevTodos.map(item =>
-          item.id === id ? { ...item, completed: newStatus } : item,
-        ),
-      );
-    } catch (error) {
-      setErrorMessage(ErrorMessages.edit);
-    } finally {
-      setTodoLoading(id, false);
-    }
-  };
-
-  const handleUpdateTodo = async (newTitle: string) => {
-    await updateTodoForm({
-      newTitle,
-      onSave,
-      onCancel,
+    await updateTodoOnClick({
+      keyValue: 'completed',
       setErrorMessage,
-      setTodos,
       setTodoLoading,
+      setTodos,
       id,
+      newData: !completed,
     });
   };
 
@@ -74,7 +54,15 @@ export const TodoItem: FC<Props> = ({
         return;
       }
 
-      await handleUpdateTodo(editValue);
+      await updateTodoOnClick({
+        keyValue: 'title',
+        newData: trimmedValue,
+        onSave,
+        setErrorMessage,
+        setTodos,
+        setTodoLoading,
+        id,
+      });
     } else if (e.key === 'Escape') {
       setEditValue(initialTitle);
       onCancel?.();
@@ -83,7 +71,15 @@ export const TodoItem: FC<Props> = ({
 
   const handleBlur = async () => {
     if (editValue !== title) {
-      await handleUpdateTodo(editValue);
+      await updateTodoOnClick({
+        keyValue: 'title',
+        newData: trimmedValue,
+        onSave,
+        setErrorMessage,
+        setTodos,
+        setTodoLoading,
+        id,
+      });
     } else {
       onCancel?.();
     }

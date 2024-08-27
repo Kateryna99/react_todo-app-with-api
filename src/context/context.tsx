@@ -8,7 +8,7 @@ import {
   ReactNode,
 } from 'react';
 import { Todo } from '../types/Todo';
-import { deleteTodoInTodoList } from '../hooks/useDeleteTodoFromList';
+import { deleteTodoInTodoList } from '../helpers/deleteTodoFromList';
 import { ErrorMessages } from '../enum/ErrorMessages';
 
 interface ContextProps {

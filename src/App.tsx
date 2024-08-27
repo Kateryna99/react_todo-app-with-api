@@ -8,7 +8,7 @@ import { useTodosContext } from './context/context';
 
 import { Todo } from './types/Todo';
 import { FilterTypes } from './enum/FilterTypes';
-import { getFilteredData } from './helpers/helpers';
+import { getFilteredData } from './helpers/getFilteredData';
 import { TodoForm } from './components/todoForm/TodoForm';
 import { TodoList } from './components/todoList/TodoList';
 import { ErrorMessages } from './enum/ErrorMessages';
