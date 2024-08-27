@@ -91,7 +91,7 @@ export const TodoItem: FC<Props> = ({
     }
 
     setInitialTitle(title);
-  }, [isEditing]);
+  }, [isEditing, title]);
 
   return (
     <div data-cy="Todo" className={classNames('todo', { completed })}>

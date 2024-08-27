@@ -15,8 +15,9 @@ export const updateTodoValues = async (props: UpdateTodo) => {
         item.id === id ? { ...item, [keyValue]: newData } : item,
       ),
     );
-  } catch {
+  } catch (error) {
     setErrorMessage(ErrorMessages.edit);
+    throw error;
   } finally {
     setTodoLoading(id, false);
   }
